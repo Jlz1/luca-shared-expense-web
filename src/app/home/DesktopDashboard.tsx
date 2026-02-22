@@ -416,7 +416,7 @@ const ActivityDetailColumn = ({ eventId, activityId, onClose, onUpdateActivity, 
 
     // --- STATE EDIT MODE ---
     const [isEditing, setIsEditing] = useState(false);
-    const [items, setItems] = useState<Item[]>([]);
+    const [items, setItems] = useState<Item[]>(activity?.items as Item[] || []);
 
     // --- STATE EQUAL SPLIT ---
     const currentSplitEqual = activity?.isSplitEqual ?? false;
