@@ -81,9 +81,6 @@ export default function SummaryModal({ isOpen, onClose, event }: SummaryModalPro
             </div>
 
             <div className="mt-auto">
-                <button className="w-full py-3 bg-ui-black text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-                    <Share2 className="w-4 h-4" /> Share Summary
-                </button>
                 <button
                                         className="hidden md:inline-block w-full mt-3 px-6 py-3 bg-ui-accent-yellow text-ui-black font-bold rounded-xl shadow-md hover:bg-yellow-400 transition-all focus:outline-none focus:ring-2 focus:ring-yellow-300"
                                         onClick={async () => {
