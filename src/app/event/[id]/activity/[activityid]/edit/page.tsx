@@ -439,14 +439,66 @@ export default function ActivityEditPage() {
           });
 
           // Save items: update existing, create new
-          // Distribute global discount equally across all items
-          const discountPerItem = items.length > 0 ? globalDiscountAmount / items.length : 0;
-          for (const item of items) {
+          // Distribute global discount proportionally across items by their (price × quantity),
+          // capping each item at its own total and redistributing any remainder where possible.
+          const perItemDiscounts: number[] = (() => {
+              if (!items.length || globalDiscountAmount <= 0) {
+                  return items.map(() => 0);
+              }
+
+              const bases = items.map((item) => {
+                  const base = (item.price || 0) * (item.quantity || 0);
+                  return base > 0 ? base : 0;
+              });
+              const totalBase = bases.reduce((sum, base) => sum + base, 0);
+
+              // Fallback to equal split if we can't derive a meaningful base.
+              if (totalBase <= 0) {
+                  const equal = globalDiscountAmount / items.length;
+                  return items.map(() => equal);
+              }
+
+              const maxDiscounts = bases.slice(); // cap at price × quantity
+              const discounts = new Array(items.length).fill(0) as number[];
+
+              // Initial proportional allocation.
+              for (let i = 0; i < items.length; i++) {
+                  const proportional = (globalDiscountAmount * bases[i]) / totalBase;
+                  discounts[i] = Math.min(proportional, maxDiscounts[i]);
+              }
+
+              let allocated = discounts.reduce((sum, d) => sum + d, 0);
+              let remaining = globalDiscountAmount - allocated;
+
+              // Redistribute remaining discount, if any, to items that still have capacity.
+              // Limit passes to avoid potential infinite loops from floating point noise.
+              for (let pass = 0; pass < 2 && remaining > 1e-6; pass++) {
+                  const capacities = discounts.map((d, i) => Math.max(0, maxDiscounts[i] - d));
+                  const totalCapacity = capacities.reduce((sum, c) => sum + c, 0);
+                  if (totalCapacity <= 0) break;
+
+                  for (let i = 0; i < items.length && remaining > 1e-6; i++) {
+                      if (capacities[i] <= 0) continue;
+                      const extra = Math.min(
+                          (remaining * capacities[i]) / totalCapacity,
+                          capacities[i]
+                      );
+                      if (extra <= 0) continue;
+                      discounts[i] += extra;
+                      remaining -= extra;
+                  }
+              }
+
+              return discounts;
+          })();
+
+          for (let index = 0; index < items.length; index++) {
+              const item = items[index];
               const { id: itemId, ...itemData } = item;
               const savedItemData = {
                   ...itemData,
                   taxPercentage: taxPercent,
-                  discountAmount: discountPerItem,
+                  discountAmount: perItemDiscounts[index] ?? 0,
               };
               if (itemId) {
                   await updateItem(userId, eventId, activityId, itemId, savedItemData);
