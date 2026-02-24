@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💸 Luca (Splitify) - Smart Shared Expense Application
 
-## Getting Started
+Luca (juga dikenal sebagai Splitify) adalah aplikasi pencatatan dan pembagian tagihan patungan (*split bill*) yang dirancang untuk bekerja secara **offline-first** dengan performa tinggi. Aplikasi ini dilengkapi dengan fitur pintar seperti pemindaian struk otomatis (OCR) dan optimasi penyelesaian pembayaran (*smart settlement*).
 
-First, run the development server:
+![Banner Placeholder](https://via.placeholder.com/800x400?text=Screenshot+Aplikasi+Luca+di+Sini)
+*(Ganti link gambar di atas dengan screenshot aplikasi aslimu)*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Fitur Utama
+- **Event & Member Management:** Buat acara patungan dan kelola anggota dengan mudah.
+- **Smart Receipt Scanning (OCR):** Tidak perlu input manual! Unggah foto struk belanja, dan sistem (terintegrasi dengan model Machine Learning via Hugging Face) akan membaca item dan harganya secara otomatis.
+- **Manual Input:** Opsi untuk memasukkan transaksi secara manual jika diperlukan.
+- **Smart Settlement (Payment Optimization):** Mesin kalkulasi otomatis yang menyederhanakan alur hutang-piutang antar anggota menjadi seminimal mungkin (siapa bayar ke siapa dengan rute terpendek).
+- **Event Recap & Summary:** Ringkasan lengkap dari seluruh pengeluaran acara.
+- **Offline Mode & Local Storage:** Berfungsi dengan lancar tanpa koneksi internet yang stabil (sinkronisasi data ke cloud akan dilakukan di latar belakang).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Teknologi yang Digunakan
+- **Frontend:** Next.js, Node.js
+- **Database/Auth:** Firebase
+- **Machine Learning (OCR):** Hugging Face API Endpoint
+- **Deployment:** Vercel (Cloud) & Docker (Lokal)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Cara Menjalankan Aplikasi Secara Lokal (Untuk Penilaian)
 
-## Learn More
+Aplikasi ini telah di-dockerize agar mudah diuji coba di komputer mana pun tanpa perlu mengatur *environment* dari nol.
 
-To learn more about Next.js, take a look at the following resources:
+### Prasyarat
+- Pastikan [Docker Desktop](https://www.docker.com/products/docker-desktop/) sudah terinstal dan berjalan.
+- Komputer harus terhubung ke internet untuk menarik *image* dari Docker Hub dan berkomunikasi dengan API OCR.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Langkah-langkah (Docker Run)
+1. Buka Terminal atau Command Prompt.
+2. Jalankan perintah berikut untuk menarik dan menyalakan aplikasi:
+   ```bash
+   docker run -p 3000:3000 jeremyemmanuel/splitify-web
