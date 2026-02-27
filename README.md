@@ -20,7 +20,7 @@ Luca (juga dikenal sebagai Splitify) adalah aplikasi pencatatan dan pembagian ta
 <img width="1863" height="673" alt="luca_app_1" src="https://github.com/user-attachments/assets/e670a230-6ff6-41bc-9ae2-50be49db86b5" />
 <img width="1867" height="675" alt="luca_app_2" src="https://github.com/user-attachments/assets/ea890297-53e3-4a37-9ca0-9e01058e13d2" />
 
-
+ 
 ## 🚀 Cara Menjalankan Aplikasi Secara Lokal 
 ```bash
 docker run -p 3000:3000 jeremyemmanuel/splitify-web
