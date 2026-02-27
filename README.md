@@ -2,7 +2,7 @@
 # 💸 Luca - Splitting Bills Made Easy
 
 Luca (juga dikenal sebagai Splitify) adalah aplikasi pencatatan dan pembagian tagihan patungan (*split bill*) yang dirancang untuk bekerja  dengan performa tinggi. Aplikasi ini dilengkapi dengan fitur pintar seperti pemindaian struk otomatis (OCR) dan optimasi penyelesaian pembayaran (*smart settlement*).
-
+ 
 ## ✨ Fitur Utama
 - **Event & Member Management:** Buat acara patungan dan kelola anggota dengan mudah.
 - **Smart Receipt Scanning (OCR):** Tidak perlu input manual! Unggah foto struk belanja, dan sistem (terintegrasi dengan model Machine Learning via Hugging Face) akan membaca item dan harganya secara otomatis.
