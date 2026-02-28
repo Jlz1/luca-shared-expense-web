@@ -62,17 +62,18 @@ export async function scanReceipt(
     }
 
     const result = await response.json();
+    console.log("Isi asli dari Hugging Face:", result);
 
     if (result.status === "success" && result.data) {
       return {
         success: true,
-        data: result.data,
+        data: result.data || result,
       };
     }
 
     return {
       success: false,
-      error: result.error || "Unknown error from backend",
+      error: result.error || "Google AI Studio Quota exceeded",
     };
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
