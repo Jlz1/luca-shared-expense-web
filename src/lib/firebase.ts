@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -14,24 +14,30 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-console.log("[Firebase] Initializing with config:", {
-  projectId: firebaseConfig.projectId,
-  authDomain: firebaseConfig.authDomain,
-  storageBucket: firebaseConfig.storageBucket,
-});
+// Guard: skip initialization during docker build / CI when env vars are absent.
+// NEXT_PUBLIC_* vars are baked in at build time — if missing, initializeApp would throw.
+const isConfigured = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+if (isConfigured) {
+  console.log("[Firebase] Initializing with config:", {
+    projectId: firebaseConfig.projectId,
+    authDomain: firebaseConfig.authDomain,
+    storageBucket: firebaseConfig.storageBucket,
+  });
+}
 
-// Initialize Firebase Authentication
-export const auth = getAuth(app);
+// Reuse existing app instance if already initialized (e.g. hot-reload), otherwise init only when configured
+const app = isConfigured
+  ? (getApps().length > 0 ? getApp() : initializeApp(firebaseConfig))
+  : (getApps().length > 0 ? getApp() : null);
 
-// Initialize Firestore
-export const db = getFirestore(app);
-// Ganti (db as any).projectId dengan firebaseConfig.projectId
-console.log("[Firebase] Firestore initialized with project:", firebaseConfig.projectId || "unknown");
+// Initialize Firebase services — will be null during build without env vars (safe: never called server-side at build time)
+export const auth = app ? getAuth(app) : (null as unknown as ReturnType<typeof getAuth>);
+export const db = app ? getFirestore(app) : (null as unknown as ReturnType<typeof getFirestore>);
+export const storage = app ? getStorage(app) : (null as unknown as ReturnType<typeof getStorage>);
 
-// Initialize Firebase Storage
-export const storage = getStorage(app);
+if (isConfigured && app) {
+  console.log("[Firebase] Firestore initialized with project:", firebaseConfig.projectId || "unknown");
+}
 
-export default app;
+export default app!
